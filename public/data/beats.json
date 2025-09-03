@@ -1,0 +1,18 @@
+[
+  {
+    "id": "beat-001",
+    "title": "Night Drive",
+    "bpm": 140,
+    "genre": "Trap",
+    "mood": "Dark",
+    "url": "/audio/beat1.mp3"
+  },
+  {
+    "id": "beat-002",
+    "title": "Neon Rain",
+    "bpm": 90,
+    "genre": "Boom Bap",
+    "mood": "Moody",
+    "url": "/audio/beat2.mp3"
+  }
+]
