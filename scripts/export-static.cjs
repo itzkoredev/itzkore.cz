@@ -62,18 +62,31 @@ if (fs.existsSync(apiDir)) {
   process.exit(3);
 }
 
-// Build and export with STATIC_EXPORT=1
+// Build with STATIC_EXPORT=1 (Next 15: output: 'export' handles the static HTML generation during build)
 const env = { ...process.env, STATIC_EXPORT: '1' };
 let r = spawnSync('npx', ['next', 'build'], { stdio: 'inherit', env, shell: process.platform === 'win32' });
 if (r.status !== 0) { console.error('Build failed'); cleanup(); process.exit(r.status || 1); }
-r = spawnSync('npx', ['next', 'export'], { stdio: 'inherit', env, shell: process.platform === 'win32' });
-if (r.status !== 0) { console.error('Export failed'); cleanup(); process.exit(r.status || 1); }
 
 // Package to dist-static and add redirects + sitemap
-const outDir = path.join(root, 'out');
+// Resolve export directory: prefer .next/export (some versions), fallback to out/
+let outDir = path.join(root, '.next', 'export');
+if (!fs.existsSync(outDir)) {
+  outDir = path.join(root, 'out');
+}
+if (!fs.existsSync(outDir)) {
+  console.error('[export-static] ERROR: export output not found at .next/export or out/.');
+  cleanup();
+  process.exit(4);
+}
 const dist = path.join(root, 'dist-static');
 rmrf(dist);
-fs.cpSync(outDir, dist, { recursive: true });
+try {
+  fs.cpSync(outDir, dist, { recursive: true });
+} catch (e) {
+  console.error('[export-static] ERROR: failed to copy export to dist-static:', e && e.message);
+  cleanup();
+  process.exit(5);
+}
 
 // Add static redirect /kontakt -> /contact
 const kontaktDir = path.join(dist, 'kontakt');

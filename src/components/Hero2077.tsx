@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { LinkButton } from "./ui/Button";
 import { useI18n } from "../lib/i18n";
 
 export default function Hero2077() {
@@ -17,7 +18,7 @@ export default function Hero2077() {
     const id = setInterval(() => {
       setTyped(msg.slice(0, i++));
       if (i > msg.length) clearInterval(id);
-    }, 50);
+    }, 25);
     return () => clearInterval(id);
   }, [msg]);
 
@@ -29,8 +30,8 @@ export default function Hero2077() {
       const rect = el.getBoundingClientRect();
       const x = (e.clientX - rect.width / 2) / rect.width;
       const y = (e.clientY - rect.height / 2) / rect.height;
-      if (parallaxRef1.current) parallaxRef1.current.style.transform = `translate3d(${x * 8}px, ${y * 8}px, 0)`;
-      if (parallaxRef2.current) parallaxRef2.current.style.transform = `translate3d(${x * -8}px, ${y * -8}px, 0)`;
+      if (parallaxRef1.current) parallaxRef1.current.style.transform = `translate3d(${x * 16}px, ${y * 16}px, 0)`;
+      if (parallaxRef2.current) parallaxRef2.current.style.transform = `translate3d(${x * -16}px, ${y * -16}px, 0)`;
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
@@ -53,6 +54,11 @@ export default function Hero2077() {
         <div className="text-xl md:text-2xl lg:text-3xl font-mono mb-8">
           {typed} ▌
         </div>
+          <div className="flex flex-wrap gap-3 mb-10">
+            <LinkButton href="/music" variant="cyan">Music</LinkButton>
+            <LinkButton href="/games" variant="purple">Games</LinkButton>
+            <LinkButton href="/apps" variant="pink">Apps</LinkButton>
+          </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-sm md:text-base lg:text-lg">
           {/* HUD panels */}
           <div className="flex flex-col">
