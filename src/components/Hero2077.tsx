@@ -7,9 +7,9 @@ export default function Hero2077() {
   const { t } = useI18n();
   const [typed, setTyped] = useState("");
   const msg = t.hero.welcome as string;
-  const containerRef = useRef (null);
-  const parallaxRef1 = useRef (null);
-  const parallaxRef2 = useRef (null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const parallaxRef1 = useRef<HTMLDivElement>(null);
+  const parallaxRef2 = useRef<HTMLDivElement>(null);
 
   // typing effect
   useEffect(() => {
