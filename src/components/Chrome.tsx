@@ -6,6 +6,7 @@ import Scene2077 from "./Scene2077";
 import RouteGlitch from "./RouteGlitch";
 import PreloadRoutes from "./PreloadRoutes";
 import RouteReady from "./RouteReady";
+import ElectionBanner from "./ElectionBanner";
 
 export default function Chrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -24,6 +25,7 @@ export default function Chrome({ children }: { children: React.ReactNode }) {
   <RouteGlitch theme="black" />
       <PreloadRoutes />
   <RouteReady />
+      <ElectionBanner />
       <Header />
         <main id="main" className="flex-1">{children}</main>
       <Footer />

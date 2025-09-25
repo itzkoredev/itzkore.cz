@@ -41,6 +41,11 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
       title: "Aplikace",
       blurb: "Utility, webové nástroje a experimenty.",
       coming: "Demo app (brzy)",
+      volby2025: {
+        title: "Volby 2025 - Kalkulačka",
+        description: "Volební kalkulačka a informační web pro volby 2025",
+        link: "Navštívit volby2025"
+      }
     },
     contact: {
       title: "Kontakt",
@@ -158,6 +163,11 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
       title: "Apps",
       blurb: "Utilities, web tools, and experiments.",
       coming: "Demo app (soon)",
+      volby2025: {
+        title: "Elections 2025 - Calculator",
+        description: "Election calculator and info website for 2025 elections",
+        link: "Visit volby2025"
+      }
     },
     contact: {
       title: "Contact",
