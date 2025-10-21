@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getSupabase } from "../../lib/supabaseClient";
+import { motion } from "framer-motion";
+import { Filter, Music2, Sparkles } from "lucide-react";
 import { useI18n } from "../../lib/i18n";
 import BeatPlayer, { type BeatPlayerHandle } from "../BeatPlayer";
 
@@ -22,48 +23,38 @@ export default function BeatsBrowser() {
   const [genre, setGenre] = useState<string>("");
   const [mood, setMood] = useState<string>("");
   const listRef = useRef<HTMLUListElement>(null);
-  // Footer player context removed; use no-op updater to keep local calls intact
   const update = (_: any) => {};
 
-  const tNoConfig = t.beats.errors.noConfig;
-  const tNoData = t.beats.errors.noData;
-  const tGeneric = t.beats.errors.generic;
+  // Load beats from local JSON store
   useEffect(() => {
-    const sb = getSupabase();
     async function load() {
       try {
-        if (!sb) {
-          setError(tNoConfig);
-          setBeats([]);
-          setCurrent(null);
-          return;
-        }
-        const { data, error } = await sb
-          .from("beats")
-          .select("*")
-          .order("title", { ascending: true });
-        if (error) throw error;
+        const res = await fetch('/data/beats.json');
+        if (!res.ok) throw new Error('Failed to load beats');
+        const data = await res.json();
+
         if (!data || data.length === 0) {
-          setError(tNoData);
+          setError(t.beats.errors.noData);
           setBeats([]);
           setCurrent(null);
           return;
         }
-  const list = data as unknown as Beat[];
-  setBeats(list);
-  const first = list[0] || null;
-  setCurrent(first);
-  if (first) {
-    update({ meta: { id: first.id, title: first.title, subtitle: `${first.genre} • ${first.bpm} BPM`, url: first.url } });
-  }
-  } catch (e: any) {
-    setError(e?.message ? `${tGeneric}: ${e.message}` : tGeneric);
+
+        const list = data as Beat[];
+        setBeats(list);
+        const first = list[0] || null;
+        setCurrent(first);
+        if (first) {
+          update({ meta: { id: first.id, title: first.title, subtitle: `${first.genre} • ${first.bpm} BPM`, url: first.url } });
+        }
+      } catch (e: any) {
+        setError(e?.message ? `${t.beats.errors.generic}: ${e.message}` : t.beats.errors.generic);
         setBeats([]);
         setCurrent(null);
       }
     }
     load();
-  }, [tNoConfig, tNoData, tGeneric]);
+  }, [t.beats.errors.noData, t.beats.errors.generic]);
 
   // derive filter options
   const genres = useMemo(
@@ -153,45 +144,83 @@ export default function BeatsBrowser() {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-1 items-start">
-      {/* TOP: Player card */}
-      <div className="relative overflow-hidden rounded-lg border border-white/10 bg-black/40">
-        <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
-        <div className="pointer-events-none absolute inset-0 bg-neon-spots opacity-30" />
-        <div className="p-3 md:p-4">
-          <h3 className="font-semibold text-base md:text-lg mb-2 leading-tight">{t.beats.player}</h3>
+    <div className="space-y-8">
+      {/* Player Card - Modern Design */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative overflow-hidden rounded-2xl border border-border-subtle bg-bg-elevated p-6"
+      >
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 to-rose-600/5 pointer-events-none" />
+
+        <div className="relative">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-gradient-to-r from-red-600 to-rose-600">
+              <Music2 className="w-5 h-5 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-text-primary">{t.beats.player}</h3>
+          </div>
+
           {current ? (
             <div>
-              <div className="mb-2 flex flex-nowrap items-center justify-between text-[13px] text-gray-300 gap-3 leading-tight">
-                <span className="font-medium truncate max-w-[70%]">{current.title}</span>
-                <span className="text-[11px] text-gray-400">{current.genre} • {current.bpm} BPM</span>
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <h4 className="text-lg font-semibold text-text-primary">{current.title}</h4>
+                  <p className="text-sm text-text-secondary">
+                    {current.genre} • {current.mood} • {current.bpm} BPM
+                  </p>
+                </div>
+                <div className="px-3 py-1 rounded-full bg-red-600/10 border border-red-600/20">
+                  <Sparkles className="w-4 h-4 text-red-600 inline mr-1" />
+                  <span className="text-xs font-medium text-red-600">{t.beats.active}</span>
+                </div>
               </div>
+
               <BeatPlayer
                 ref={playerRef}
                 src={current.url}
                 storagePath={!/^https?:\/\//i.test(current.url)}
                 autoPlayOnSrcChange={false}
-                vizHeight={180}
+                vizHeight={200}
                 onPrev={handlePrev}
                 onNext={handleNext}
               />
             </div>
           ) : (
-            <p className="text-sm text-gray-400">{t.beats.pickPrompt}</p>
+            <div className="py-12 text-center">
+              <Music2 className="w-12 h-12 text-text-tertiary mx-auto mb-3 opacity-50" />
+              <p className="text-text-secondary">{t.beats.pickPrompt}</p>
+            </div>
           )}
         </div>
-        <div className="pointer-events-none h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mx-3 mb-3" />
-      </div>
+      </motion.div>
 
-      {/* BOTTOM: Filters and List */}
-      <div className="space-y-3">
-  <h3 className="font-semibold">{t.beats.listTitle}</h3>
-        {error && <p className="text-red-400 text-sm">{error}</p>}
-        <div className="flex flex-wrap items-end gap-3">
-          <div>
-            <label className="block text-xs text-gray-400 mb-1">{t.beats.genre}</label>
+      {/* Filters */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="space-y-4"
+      >
+        <div className="flex items-center gap-2">
+          <Filter className="w-5 h-5 text-text-secondary" />
+          <h3 className="text-lg font-bold text-text-primary">{t.beats.listTitle}</h3>
+        </div>
+
+        {error && (
+          <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            {error}
+          </div>
+        )}
+
+        <div className="flex flex-wrap items-end gap-4">
+          <div className="flex-1 min-w-[140px]">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
+              {t.beats.genre}
+            </label>
             <select
-              className="bg-black/40 text-white border border-white/20 rounded px-2 py-2 text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-neonCyan/50"
+              className="w-full bg-bg-secondary border border-border-subtle rounded-lg px-4 py-2.5 text-text-primary focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-rose-500/50 transition-all"
               value={genre}
               onChange={(e) => setGenre(e.target.value)}
             >
@@ -201,10 +230,13 @@ export default function BeatsBrowser() {
               ))}
             </select>
           </div>
-          <div>
-            <label className="block text-xs text-gray-400 mb-1">{t.beats.mood}</label>
+
+          <div className="flex-1 min-w-[140px]">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
+              {t.beats.mood}
+            </label>
             <select
-              className="bg-black/40 text-white border border-white/20 rounded px-2 py-2 text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-neonCyan/50"
+              className="w-full bg-bg-secondary border border-border-subtle rounded-lg px-4 py-2.5 text-text-primary focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-rose-500/50 transition-all"
               value={mood}
               onChange={(e) => setMood(e.target.value)}
             >
@@ -214,49 +246,76 @@ export default function BeatsBrowser() {
               ))}
             </select>
           </div>
+
           {(genre || mood) && (
-            <button
-              className="ml-auto text-xs text-gray-300 underline hover:text-white"
+            <motion.button
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="px-4 py-2.5 rounded-lg border border-border-subtle bg-bg-secondary text-text-primary hover:bg-bg-elevated transition-colors text-sm font-medium"
               onClick={() => { setGenre(""); setMood(""); }}
             >
               {t.beats.clearFilters}
-            </button>
+            </motion.button>
           )}
         </div>
-    <ul ref={listRef} className="divide-y divide-white/10 rounded-md border border-white/10 overflow-auto max-h-[46vh] bg-black/30">
-          {filtered.map((b) => (
-      <li
+      </motion.div>
+
+      {/* Beat List */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="rounded-xl border border-border-subtle bg-bg-elevated overflow-hidden"
+      >
+        <ul ref={listRef} className="divide-y divide-border-subtle max-h-[50vh] overflow-auto">
+          {filtered.map((b, index) => (
+            <motion.li
               key={b.id}
               data-id={b.id}
-              className={["p-3 cursor-pointer transition", current?.id === b.id ? "bg-white/10 ring-1 ring-[#00B3C640]" : "hover:bg-white/5"].join(" ")}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 + index * 0.05 }}
+              className={`p-4 cursor-pointer transition-all ${
+                current?.id === b.id
+                  ? "bg-rose-500/10 border-l-4 border-l-rose-500"
+                  : "hover:bg-bg-secondary border-l-4 border-l-transparent"
+              }`}
               onClick={() => {
-        // Select and reset player source without autoplay
-        setCurrent(b);
-        update({ meta: { id: b.id, title: b.title, subtitle: `${b.genre} • ${b.bpm} BPM`, url: b.url } });
-        if (playerRef.current) {
-          playerRef.current.setSource(b.url, !/^https?:\/\//i.test(b.url));
-        }
+                setCurrent(b);
+                update({ meta: { id: b.id, title: b.title, subtitle: `${b.genre} • ${b.bpm} BPM`, url: b.url } });
+                if (playerRef.current) {
+                  playerRef.current.setSource(b.url, !/^https?:\/\//i.test(b.url));
+                }
               }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium leading-tight">{b.title}</p>
-                  <p className="text-xs text-gray-400 leading-tight">{b.genre} • {b.mood} • {b.bpm} BPM</p>
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-semibold text-text-primary truncate">{b.title}</h4>
+                  <p className="text-sm text-text-secondary mt-0.5">
+                    {b.genre} • {b.mood} • {b.bpm} BPM
+                  </p>
                 </div>
-        {current?.id === b.id ? (
-                  <span className="text-xs text-[#00B3C6] font-semibold">{t.beats.active}</span>
+
+                {current?.id === b.id ? (
+                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/30">
+                    <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+                    <span className="text-xs font-semibold text-rose-500">{t.beats.active}</span>
+                  </div>
                 ) : (
-                  <span className="text-xs text-gray-400">{t.beats.select}</span>
+                  <span className="text-xs text-text-tertiary px-3 py-1">{t.beats.select}</span>
                 )}
               </div>
-            </li>
+            </motion.li>
           ))}
+
           {filtered.length === 0 && !error && (
-            <li className="p-3 text-sm text-gray-400">{t.beats.none}</li>
+            <li className="p-8 text-center">
+              <Music2 className="w-12 h-12 text-text-tertiary mx-auto mb-3 opacity-30" />
+              <p className="text-text-secondary">{t.beats.none}</p>
+            </li>
           )}
         </ul>
-      </div>
-
+      </motion.div>
     </div>
   );
 }

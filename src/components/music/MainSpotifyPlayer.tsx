@@ -12,39 +12,18 @@ type Props = {
 export default function MainSpotifyPlayer({ tracks, startIndex = 0 }: Props) {
   const [sorted, setSorted] = useState<SpotifyTrack[]>(tracks);
   const [index, setIndex] = useState(() => Math.min(Math.max(0, startIndex), Math.max(0, tracks.length - 1)));
+  const [embedError, setEmbedError] = useState(false);
   const active = useMemo(() => sorted[index], [sorted, index]);
   // (Controls removed per request)
   const [thumbs, setThumbs] = useState<Record<string, { url: string; title?: string }>>({});
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // On mount / when tracks change: try to sort by release date (newest first)
+  // Just use tracks as-is (no API needed for static export)
   useEffect(() => {
-    let cancelled = false;
-  (async () => {
-      try {
-        const ids = tracks.map((t) => t.id).join(",");
-    // Try internal proxy first; if it fails, keep given order
-    const res = await fetch(`/api/spotify/meta?ids=${encodeURIComponent(ids)}`).catch(() => null as any);
-        if (!res.ok) throw new Error("meta fetch failed");
-        const j = await res.json();
-        const byId: Record<string, string | undefined> = {};
-        for (const it of j?.items ?? []) byId[it.id] = it.release_date;
-        const withDates = tracks.map((t) => ({ t, d: byId[t.id] ? new Date(byId[t.id]!) : null as Date | null }));
-        withDates.sort((a, b) => {
-          if (a.d && b.d) return b.d.getTime() - a.d.getTime();
-          if (a.d) return -1;
-          if (b.d) return 1;
-          return 0;
-        });
-        if (!cancelled) setSorted(withDates.map((x) => x.t));
-      } catch {
-        if (!cancelled) setSorted(tracks);
-      }
-    })();
-    return () => { cancelled = true; };
+    setSorted(tracks);
   }, [tracks]);
 
-  // Fetch thumbnails via oEmbed proxy
+  // Fetch thumbnails directly from Spotify oEmbed (no API proxy needed)
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -54,23 +33,14 @@ export default function MainSpotifyPlayer({ tracks, startIndex = 0 }: Props) {
       await Promise.all(
         missing.map(async (t) => {
           try {
-            // First try internal proxy (works in server/standalone deploys)
-            let j: any | null = null;
-            try {
-              const res = await fetch(`/api/spotify/oembed?id=${encodeURIComponent(t.id)}`);
-              if (res.ok) j = await res.json();
-            } catch {}
-            // Fallback: direct Spotify oEmbed (works on static FTP hosting)
-            if (!j) {
-              const embedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(
-                `https://open.spotify.com/track/${t.id}`
-              )}`;
-              try {
-                const r2 = await fetch(embedUrl, { cache: 'force-cache' });
-                if (r2.ok) j = await r2.json();
-              } catch {}
+            const embedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(
+              `https://open.spotify.com/track/${t.id}`
+            )}`;
+            const r = await fetch(embedUrl, { cache: 'force-cache' });
+            if (r.ok) {
+              const j = await r.json();
+              if (j?.thumbnail_url) updates[t.id] = { url: j.thumbnail_url, title: j.title };
             }
-            if (j?.thumbnail_url) updates[t.id] = { url: j.thumbnail_url, title: j.title };
           } catch {}
         })
       );
@@ -93,15 +63,39 @@ export default function MainSpotifyPlayer({ tracks, startIndex = 0 }: Props) {
     <div className="space-y-3">
       <div className="hud-card overflow-hidden flex flex-col">
         {/* Spotify embed on top */}
-  <div className="relative border-b border-white/10">
-          <iframe
-            key={active?.id}
-            className="w-full h-[300px] md:h-[360px] border-0"
-            src={`https://open.spotify.com/embed/track/${active?.id}?utm_source=generator&theme=0`}
-            loading="lazy"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            title={active?.title ?? active?.id}
-          />
+        <div className="relative border-b border-white/10">
+          {embedError ? (
+            <div className="w-full h-[300px] md:h-[360px] bg-gradient-to-br from-rose-500/10 to-pink-500/10 border-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
+              <svg className="w-16 h-16 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+              </svg>
+              <div className="space-y-2">
+                <p className="text-sm text-rose-300/90">Spotify embed není dostupný</p>
+                <p className="text-xs text-text-tertiary">Embeds jsou blokovány na localhost</p>
+                <a
+                  href={`https://open.spotify.com/track/${active?.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/30 rounded-lg transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  Otevřít na Spotify
+                </a>
+              </div>
+            </div>
+          ) : (
+            <iframe
+              key={active?.id}
+              className="w-full h-[300px] md:h-[360px] border-0"
+              src={`https://open.spotify.com/embed/track/${active?.id}?utm_source=generator&theme=0`}
+              loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              title={active?.title ?? active?.id}
+              onError={() => setEmbedError(true)}
+            />
+          )}
         </div>
 
         {/* Smaller, lively cover carousel below */}

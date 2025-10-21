@@ -1,3 +1,11 @@
-export const metadata = { title: "Mix & Master — Drill / Trap", alternates: { canonical: "/music/mix-master" } };
-import MixMasterPageClient from "../../../components/pages/MixMasterPageClient";
-export default function MixMasterPage() { return <MixMasterPageClient />; }
+export const metadata = {
+  title: "Mix & Master — Music Services",
+  description: "Professional mixing and mastering for drill, trap, and hip-hop",
+  alternates: { canonical: "/music/mix-master" }
+};
+
+import MixMasterClient from "../../../components/music/MixMasterClient";
+
+export default function MixMasterPage() {
+  return <MixMasterClient />;
+}

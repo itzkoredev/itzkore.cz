@@ -359,13 +359,14 @@ export default forwardRef<BeatPlayerHandle, Props>(function BeatPlayer({ src, st
       const points = Math.max(320, Math.floor(cssW));
       const windowBins = 3; // neighbor smoothing
       const tiltPerOct = 3.0; // dB per octave to tame lows / lift highs
-      ctx.shadowColor = 'rgba(0, 179, 198, 0.5)';
+      ctx.shadowColor = 'rgba(244, 63, 94, 0.5)'; // rose-500 shadow
       ctx.shadowBlur = 6;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       const grad = ctx.createLinearGradient(0, 0, cssW, 0);
-      grad.addColorStop(0.0, 'rgba(0, 215, 255, 0.95)');
-      grad.addColorStop(1.0, 'rgba(192, 0, 255, 0.95)');
+      grad.addColorStop(0.0, 'rgba(244, 63, 94, 0.95)'); // rose-500
+      grad.addColorStop(0.5, 'rgba(236, 72, 153, 0.95)'); // pink-500
+      grad.addColorStop(1.0, 'rgba(219, 39, 119, 0.95)'); // pink-600
       ctx.strokeStyle = grad;
       ctx.lineWidth = 1.2;
       ctx.beginPath();
@@ -574,122 +575,139 @@ export default forwardRef<BeatPlayerHandle, Props>(function BeatPlayer({ src, st
   // removed debug telemetry
 
   return (
-    <div className="space-y-3">
-  <audio ref={audioEl} src={currentSrc} preload="auto" playsInline />
-  <div className="hud-screen scanlines rounded">
-    <canvas ref={canvasRef} width={640} height={vizHeight} className="w-full" />
-    {/* slim buffering bar */}
-    {buffering && (
-      <div className="absolute left-0 right-0 bottom-0 h-[3px] overflow-hidden rm-no-anim">
-        <div className="h-full w-full bg-gradient-to-r from-[#7A00FF66] via-[#00B3C666] to-[#7A00FF66] animate-[pulse_1.2s_ease_infinite]" />
-      </div>
-    )}
-  {/* no textual buffering chip to keep UI minimal */}
-  </div>
-  {/* New compact control bar */}
-  <div className="player-bar">
-    <div className="controls-row">
-  <div className="btns">
-      <button
-        className="btn-ghost-round"
-        onClick={() => onPrevProp && onPrevProp()}
-        aria-label="Previous"
-        title="Previous"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-  <button
-        className="btn-primary-round disabled:opacity-50 disabled:cursor-not-allowed"
-        onClick={togglePlay}
-        disabled={!ready}
-        aria-disabled={!ready}
-        aria-pressed={playbackLabel === 'Pause'}
-        title={playbackLabel}
-      >
-        {playbackLabel === 'Pause' ? (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <rect x="6" y="5" width="4" height="14" rx="1" />
-            <rect x="14" y="5" width="4" height="14" rx="1" />
-          </svg>
-        ) : (
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M8 5l12 7-12 7V5z" />
-          </svg>
+    <div className="space-y-4 min-w-[320px]">
+      <audio ref={audioEl} src={currentSrc} preload="auto" playsInline />
+
+      {/* Visualizer */}
+      <div className="relative rounded-xl overflow-hidden border border-border-subtle bg-black/40 min-h-[120px]">
+        <canvas ref={canvasRef} width={640} height={vizHeight} className="w-full min-h-[120px]" />
+        {buffering && (
+          <div className="absolute left-0 right-0 bottom-0 h-1 overflow-hidden">
+            <div className="h-full w-full bg-gradient-to-r from-rose-500 via-pink-500 to-rose-500 animate-pulse" />
+          </div>
         )}
-      </button>
-      <button
-        className="btn-ghost-round"
-        onClick={() => onNextProp && onNextProp({ shuffle })}
-        aria-label="Next"
-        title="Next"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-      </button>
-          <button
-            className={["icon-toggle", "icon-toggle-sm", shuffle ? "icon-active" : ""].join(" ")}
-            onClick={() => setShuffle(s => !s)}
-            aria-pressed={shuffle}
-            title="Shuffle"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M4 4h4l4 6 4 0"/>
-              <path d="M4 20h4l4-6 4 0"/>
-              <path d="M20 10l-3-3m3 3l-3 3"/>
-              <path d="M20 14l-3-3m3 3l-3 3"/>
-            </svg>
-          </button>
-          <button
-            className={["icon-toggle", "icon-toggle-sm", repeatOne ? "icon-active" : ""].join(" ")}
-            onClick={() => setRepeatOne(r => !r)}
-            aria-pressed={repeatOne}
-            title="Repeat one"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-              <text x="11" y="15" fontSize="8" fill="currentColor">1</text>
-            </svg>
-          </button>
-  </div>
+      </div>
 
-  <div className="sep" />
-
-      <div className="time-label tabular-nums" aria-live="polite">{fmt(current)} / {fmt(duration)}</div>
-      <input
-        type="range"
-        min={0}
-        max={Math.max(1, duration || 1)}
-        step={0.01}
-        value={Math.min(current, duration || 0)}
-        onChange={onSeek}
-        className="range-thin seek"
-        aria-label="Seek"
-      />
-
-      {/* Single volume slider, no mute button */}
-      <div className="vol" title="Volume">
-        <svg className="vol-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M11 5l-5 4H3v6h3l5 4V5z"/>
-          <path d="M19 8a5 5 0 0 1 0 8"/>
-          <path d="M15 10a3 3 0 0 1 0 4"/>
-        </svg>
+      {/* Progress Bar - Big and Clear */}
+      <div className="space-y-2 min-w-[280px]">
         <input
           type="range"
           min={0}
-          max={1}
-          step={0.01}
-          value={volume}
-          onChange={(e) => setVolume(Number(e.target.value))}
-          aria-label="Volume"
-          className="range-thin w-20 sm:w-24"
+          max={Math.max(1, duration || 1)}
+          step={0.1}
+          value={Math.min(current, duration || 0)}
+          onChange={onSeek}
+          className="w-full h-2 bg-bg-secondary rounded-lg appearance-none cursor-pointer
+                     [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4
+                     [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-rose-500
+                     [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-lg
+                     [&::-webkit-slider-thumb]:hover:bg-rose-400 [&::-webkit-slider-thumb]:transition-colors
+                     [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full
+                     [&::-moz-range-thumb]:bg-rose-500 [&::-moz-range-thumb]:border-0
+                     [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:hover:bg-rose-400"
+          style={{
+            background: `linear-gradient(to right, rgb(244 63 94) 0%, rgb(244 63 94) ${(current / (duration || 1)) * 100}%, rgb(31 41 55) ${(current / (duration || 1)) * 100}%, rgb(31 41 55) 100%)`
+          }}
+          aria-label="Seek"
         />
+        <div className="flex items-center justify-between text-sm text-text-secondary tabular-nums">
+          <span>{fmt(current)}</span>
+          <span>{fmt(duration)}</span>
+        </div>
       </div>
 
-  {/* stop button removed */}
-    </div>
-  </div>
-  {/* buffering chip moved into visualizer overlay */}
-      {errMsg && <div className="text-xs text-red-400">{errMsg}</div>}
-      {vizDisabled && <div className="text-[10px] text-gray-500">Vizualizace vypnuta (CORS na externím hostiteli).</div>}
+      {/* Controls - Big Buttons */}
+      <div className="flex items-center justify-between gap-2 sm:gap-4 min-w-[320px]">
+        {/* Left: Playback Controls */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <button
+            className="p-2 sm:p-2.5 rounded-lg bg-bg-secondary border border-border-subtle text-text-primary
+                       hover:bg-bg-elevated hover:border-rose-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => onPrevProp && onPrevProp()}
+            aria-label="Previous"
+            title="Previous"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 20L9 12l10-8v16z"/>
+              <line x1="5" y1="4" x2="5" y2="20" strokeWidth="3"/>
+            </svg>
+          </button>
+
+          <button
+            className="p-3 sm:p-4 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white
+                       hover:from-rose-400 hover:to-pink-500 transition-all shadow-lg hover:shadow-rose-500/30
+                       disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-rose-500 disabled:hover:to-pink-600"
+            onClick={togglePlay}
+            disabled={!ready}
+            aria-label={playbackLabel}
+            title={playbackLabel}
+          >
+            {playbackLabel === 'Pause' ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="4" width="4" height="16" rx="1" />
+                <rect x="14" y="4" width="4" height="16" rx="1" />
+              </svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+          </button>
+
+          <button
+            className="p-2 sm:p-2.5 rounded-lg bg-bg-secondary border border-border-subtle text-text-primary
+                       hover:bg-bg-elevated hover:border-rose-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => onNextProp && onNextProp({ shuffle })}
+            aria-label="Next"
+            title="Next"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 4l10 8-10 8V4z"/>
+              <line x1="19" y1="4" x2="19" y2="20" strokeWidth="3"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Right: Volume */}
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <svg className="w-5 h-5 text-text-secondary flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+            {volume > 0.5 && <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>}
+            {volume > 0 && <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>}
+          </svg>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={volume}
+            onChange={(e) => setVolume(Number(e.target.value))}
+            className="w-20 sm:w-24 md:w-32 min-w-[80px] h-2 bg-bg-secondary rounded-lg appearance-none cursor-pointer
+                       [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5
+                       [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-rose-500
+                       [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:hover:bg-rose-400
+                       [&::-moz-range-thumb]:w-3.5 [&::-moz-range-thumb]:h-3.5 [&::-moz-range-thumb]:rounded-full
+                       [&::-moz-range-thumb]:bg-rose-500 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
+            style={{
+              background: `linear-gradient(to right, rgb(244 63 94) 0%, rgb(244 63 94) ${volume * 100}%, rgb(31 41 55) ${volume * 100}%, rgb(31 41 55) 100%)`
+            }}
+            aria-label="Volume"
+          />
+          <span className="text-xs text-text-tertiary w-8 text-right tabular-nums">{Math.round(volume * 100)}%</span>
+        </div>
+      </div>
+
+      {/* Error Messages */}
+      {errMsg && (
+        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+          {errMsg}
+        </div>
+      )}
+      {vizDisabled && (
+        <div className="text-xs text-text-tertiary">
+          Vizualizace vypnuta (CORS na externím hostiteli).
+        </div>
+      )}
     </div>
   );
 });

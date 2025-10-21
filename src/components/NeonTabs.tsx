@@ -8,7 +8,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 type Tab = {
   label: string;
   href: string;
-  accent?: "neonPurple" | "neonCyan" | "neonGreen" | "neonPink" | "neonRed";
+  accent?: "neonPink";
 };
 
 export default function NeonTabs({ tabs }: { tabs: Tab[] }) {
@@ -38,12 +38,7 @@ export default function NeonTabs({ tabs }: { tabs: Tab[] }) {
     const rw = wrap.getBoundingClientRect();
     const left = r.left - rw.left + wrap.scrollLeft;
     const width = r.width;
-    const accent = tabs.find((t) => t.href === activeHref)?.accent ?? "neonCyan";
-    const color =
-      accent === "neonPurple" ? "#7A00FF" :
-      accent === "neonGreen" ? "#1FAA59" :
-      accent === "neonPink" ? "#C000FF" :
-      accent === "neonRed" ? "#FF0033" : "#00B3C6";
+    const color = "#ec4899"; // pink-500 - unified for Music
     setIndicator({ left, width, color });
   }, [activeHref, tabs]);
 
@@ -63,21 +58,24 @@ export default function NeonTabs({ tabs }: { tabs: Tab[] }) {
 
   return (
     <div className="relative">
-      {/* bottom hud line */}
-      <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      {/* Subtle separator line */}
+      <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-rose-500/20 to-transparent" />
 
-      <nav ref={containerRef} className="relative flex items-center gap-2 overflow-x-auto py-2 px-2">
-        {/* animated indicator */}
+      <nav ref={containerRef} className="relative flex items-center gap-3 overflow-x-auto py-3 px-3">
+        {/* Animated glow indicator */}
         <div
-          className="pointer-events-none absolute top-1 bottom-1 z-0 rounded-lg transition-all duration-300 ease-out"
-          style={{ left: indicator.left, width: indicator.width, boxShadow: `0 0 0 1px #ffffff22 inset, 0 0 24px ${indicator.color}44` }}
-        >
-          <div className="h-full w-full rounded-lg opacity-30" style={{ background: `linear-gradient(135deg, ${indicator.color}33, transparent)` }} />
-        </div>
+          className="pointer-events-none absolute top-2 bottom-2 z-0 rounded-full transition-all duration-500 ease-out"
+          style={{
+            left: indicator.left,
+            width: indicator.width,
+            background: `linear-gradient(135deg, ${indicator.color}15, ${indicator.color}08)`,
+            boxShadow: `0 0 20px ${indicator.color}30, 0 0 40px ${indicator.color}15, inset 0 0 0 1px ${indicator.color}20`,
+            filter: 'blur(0.5px)',
+          }}
+        />
 
         {tabs.map((t) => {
           const active = activeHref === t.href;
-          const accent = t.accent ?? "neonCyan";
           return (
             <Link
               key={t.href}
@@ -85,38 +83,50 @@ export default function NeonTabs({ tabs }: { tabs: Tab[] }) {
               ref={(el) => {
                 linkRefs.current[t.href] = el;
               }}
-              onClick={() => { window.dispatchEvent(new CustomEvent("route-glitch-start")); window.dispatchEvent(new CustomEvent("route-progress-start")); }}
-              onMouseEnter={() => { try { router.prefetch(t.href); } catch {} }}
-              onFocus={() => { try { router.prefetch(t.href); } catch {} }}
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent("route-glitch-start"));
+                window.dispatchEvent(new CustomEvent("route-progress-start"));
+              }}
+              onMouseEnter={() => {
+                try {
+                  router.prefetch(t.href);
+                } catch {}
+              }}
+              onFocus={() => {
+                try {
+                  router.prefetch(t.href);
+                } catch {}
+              }}
               aria-current={active ? "page" : undefined}
               className={[
-                "relative z-10 px-5 py-3 rounded-lg border select-none transition-colors focus-visible:ring-2 focus-visible:ring-[#00B3C6]",
-                "bg-black/40 border-white/10 text-gray-300",
-                active ? "text-white" : "hover:text-white",
+                "group relative z-10 px-5 py-2.5 rounded-full select-none transition-all duration-300",
+                "text-xs uppercase tracking-widest font-semibold",
+                active
+                  ? "text-rose-400"
+                  : "text-text-secondary hover:text-text-primary",
               ].join(" ")}
             >
+              {/* Hover glow effect */}
               <span
                 className={[
-                  "pointer-events-none absolute inset-0 rounded-lg",
-                  "ring-1 ring-inset ring-white/10",
-                ].join(" ")}
-              />
-              <span
-                className={[
-                  "pointer-events-none absolute -inset-px rounded-lg blur-sm opacity-0 transition-opacity",
-                  active ? "opacity-60" : "opacity-0 hover:opacity-40",
-                  accent === "neonPurple" && "bg-[#7A00FF40]",
-                  accent === "neonCyan" && "bg-[#00B3C640]",
-                  accent === "neonGreen" && "bg-[#1FAA5940]",
-                  accent === "neonPink" && "bg-[#C000FF40]",
-                  accent === "neonRed" && "bg-[#FF003340]",
+                  "pointer-events-none absolute inset-0 rounded-full transition-all duration-500",
+                  active
+                    ? "bg-rose-500/10 shadow-[0_0_15px_rgba(236,72,153,0.2)]"
+                    : "bg-transparent group-hover:bg-rose-500/5 group-hover:shadow-[0_0_10px_rgba(236,72,153,0.1)]",
                 ].join(" ")}
                 aria-hidden
               />
-              <span className="relative z-10 font-semibold tracking-wide text-base">
-                {t.label}
-              </span>
-              <span className="pointer-events-none absolute left-0 right-0 -bottom-[6px] mx-2 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+
+              {/* Text */}
+              <span className="relative z-10">{t.label}</span>
+
+              {/* Active underline */}
+              {active && (
+                <span
+                  className="pointer-events-none absolute left-1/2 -translate-x-1/2 -bottom-1 h-px w-8 bg-gradient-to-r from-transparent via-rose-400 to-transparent"
+                  aria-hidden
+                />
+              )}
             </Link>
           );
         })}

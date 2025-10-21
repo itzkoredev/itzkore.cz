@@ -8,6 +8,7 @@ export default function TabProgress({ height = 2 }: { height?: number }) {
   const [progress, setProgress] = useState(0);
   const timerRef = useRef<number | null>(null);
   const runRef = useRef(0);
+  const fallbackRef = useRef<number | null>(null);
 
   // Start on custom event (from tab/link click)
   useEffect(() => {
@@ -17,6 +18,8 @@ export default function TabProgress({ height = 2 }: { height?: number }) {
       setActive(true);
       setProgress(0.05);
       if (timerRef.current) window.clearInterval(timerRef.current);
+      if (fallbackRef.current) window.clearTimeout(fallbackRef.current);
+      
       const startedAt = performance.now();
       timerRef.current = window.setInterval(() => {
         if (runRef.current !== run) return;
@@ -25,10 +28,24 @@ export default function TabProgress({ height = 2 }: { height?: number }) {
         const eased = 0.9 * (1 - Math.pow(1 - t, 3));
         setProgress((p) => Math.max(p, eased));
       }, 100);
+      
+      // Fallback: auto-complete after 5 seconds if not finished
+      fallbackRef.current = window.setTimeout(() => {
+        if (runRef.current === run) {
+          runRef.current += 1;
+          setProgress(1);
+          setTimeout(() => {
+            setActive(false);
+            setProgress(0);
+            if (timerRef.current) window.clearInterval(timerRef.current);
+          }, 300);
+        }
+      }, 5000);
     };
     window.addEventListener("route-progress-start", start as EventListener);
     const completeNow = () => {
       runRef.current += 1;
+      if (fallbackRef.current) window.clearTimeout(fallbackRef.current);
       setActive(true);
       setProgress(1);
       const t = window.setTimeout(() => {
@@ -42,6 +59,7 @@ export default function TabProgress({ height = 2 }: { height?: number }) {
     return () => {
       window.removeEventListener("route-progress-start", start as EventListener);
       window.removeEventListener("route-progress-complete", completeNow as EventListener);
+      if (fallbackRef.current) window.clearTimeout(fallbackRef.current);
     };
   }, []);
 

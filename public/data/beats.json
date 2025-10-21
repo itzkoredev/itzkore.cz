@@ -1,18 +1,170 @@
 [
   {
     "id": "beat-001",
-    "title": "Night Drive",
-    "bpm": 140,
+    "title": "Temporary",
+    "bpm": 150,
     "genre": "Trap",
-    "mood": "Dark",
-    "url": "/audio/beat1.mp3"
+    "mood": "Progressive, Epic",
+    "url": "https://www.dropbox.com/scl/fi/oworxa7k4hkdouwyfixjc/trap-progressive-epic-Temporary-150bpm-F-minor.wav?rlkey=2bu6rmc82oo9zxrhy1je9jom2&dl=0"
   },
   {
     "id": "beat-002",
-    "title": "Neon Rain",
-    "bpm": 90,
-    "genre": "Boom Bap",
-    "mood": "Moody",
-    "url": "/audio/beat2.mp3"
+    "title": "Smínka",
+    "bpm": 158,
+    "genre": "Trap",
+    "mood": "Powerful, Dark",
+    "url": "https://www.dropbox.com/scl/fi/eajqelpy2ocklo44v1i2y/trap-powerful-dark-Sm-nka-158bpm-Dmin.wav?rlkey=11k3ypvvbxkqozscymzbhfcvg&dl=0"
+  },
+  {
+    "id": "beat-003",
+    "title": "State of Decay",
+    "bpm": 135,
+    "genre": "Trap",
+    "mood": "Dystopic, Atmospheric",
+    "url": "https://www.dropbox.com/scl/fi/g7peu5k57gdu9m22v2sld/trap-dystopic-atmo-State-of-decay-135bpm-Gphrygian.wav?rlkey=b984jkij73mx9eirbk9x10wxg&dl=0"
+  },
+  {
+    "id": "beat-004",
+    "title": "Fed Up",
+    "bpm": 135,
+    "genre": "Trap",
+    "mood": "Laid Back, Eccentric",
+    "url": "https://www.dropbox.com/scl/fi/gujs0kp8dlxufm0wtw36p/trap-laid-back-eccentric-Fed-up-135bpm-Cmin-x-s1monbeatz.wav?rlkey=f8njur7m3602d8y7k9vgrkeg7&dl=0"
+  },
+  {
+    "id": "beat-005",
+    "title": "Fallout",
+    "bpm": 141,
+    "genre": "Trap",
+    "mood": "Dark, Evil",
+    "url": "https://www.dropbox.com/scl/fi/l3srqn0ipuckv9l0ldviv/trap-dark-evil-Fallout-141bpm-F-minor.wav?rlkey=1n8js4frqtxm0t8sp3fr0fsj7&dl=0"
+  },
+  {
+    "id": "beat-006",
+    "title": "Blackwall Protocol",
+    "bpm": 154,
+    "genre": "Philly Supertrap",
+    "mood": "Dark, Hard",
+    "url": "https://www.dropbox.com/scl/fi/l82yyzmlvrr7wr923a2i7/philly-supertrap-dark-hard-Blackwall-protocol-154bpm-D-min-x-estheticgloom.wav?rlkey=3qqz1dc9elikyopl8osejn2kq&dl=0"
+  },
+  {
+    "id": "beat-007",
+    "title": "Dekadence",
+    "bpm": 150,
+    "genre": "Philly Drill",
+    "mood": "Tense, Anxious",
+    "url": "https://www.dropbox.com/scl/fi/umwvv56ra13xwbd9zjzgt/philly-drill-tense-anxious-Dekadence-150bpm-Dmin.wav?rlkey=hyehhju0b4ifsczz3pbedjgi0&dl=0"
+  },
+  {
+    "id": "beat-008",
+    "title": "Never Enough",
+    "bpm": 150,
+    "genre": "Philly Drill",
+    "mood": "Sad, Dark",
+    "url": "https://www.dropbox.com/scl/fi/n9xo45bflyqsp50hsdp3m/philly-drill-sad-dark-Never-Enough-150bpm-Emin.wav?rlkey=4c917nv6sqfoom5lk2doh6rzv&dl=0"
+  },
+  {
+    "id": "beat-009",
+    "title": "Survival Instinct",
+    "bpm": 150,
+    "genre": "Philly Drill",
+    "mood": "Powerful, Dark",
+    "url": "https://www.dropbox.com/scl/fi/33rfk0ch57xcoheoy061g/philly-drill-powerful-dark-Survival-Instinct-150bpm-Amin.wav?rlkey=qgzm6ahsonuykv2xyop96abip&dl=0"
+  },
+  {
+    "id": "beat-010",
+    "title": "Flock Theory",
+    "bpm": 150,
+    "genre": "Philly Drill",
+    "mood": "Minimal, Heavy",
+    "url": "https://www.dropbox.com/scl/fi/vmx9zvb8ilsi125fral5a/philly-drill-minimal-heavy-Flock-Theory-150bpm-Cmin.wav?rlkey=oekp6bi7ytqcoczce0submpq8&dl=0"
+  },
+  {
+    "id": "beat-011",
+    "title": "Cloak and Dagger",
+    "bpm": 150,
+    "genre": "Philly Drill",
+    "mood": "Minimal, Evil",
+    "url": "https://www.dropbox.com/scl/fi/wlwrygo45ht6k0p8hp2mg/philly-drill-minimal-evil-Cloak-and-Dagger-150bpm-Bmin.wav?rlkey=6uxx5lcxrmaur2179qljshgbj&dl=0"
+  },
+  {
+    "id": "beat-012",
+    "title": "Soulkiller",
+    "bpm": 158,
+    "genre": "Philly Drill",
+    "mood": "Hard, Dark",
+    "url": "https://www.dropbox.com/scl/fi/t4kndlokgddohcj1t0fwf/philly-drill-hard-dark-Soulkiller-158bpm-Dmin.wav?rlkey=t46gpffhewmcc7bipakxhcnpm&dl=0"
+  },
+  {
+    "id": "beat-013",
+    "title": "Spirit Realm",
+    "bpm": 145,
+    "genre": "Philly Drill",
+    "mood": "Hard, Angry",
+    "url": "https://www.dropbox.com/scl/fi/gd0hms8esblfod3c5rh78/philly-drill-hard-angry-Spirit-Realm-145bpm-D-min-x-mizzlesyd.wav?rlkey=gvpux3vzvtqk4cs0sc9zt9610&dl=0"
+  },
+  {
+    "id": "beat-014",
+    "title": "Tombstone",
+    "bpm": 150,
+    "genre": "Philly Drill",
+    "mood": "Evil, Heavy",
+    "url": "https://www.dropbox.com/scl/fi/x62ityatl6ti9anjg2gfl/philly-drill-evil-heavy-Tombstone-150bpm-Cmin.wav?rlkey=o8e7rfdbhgzxsmewwwwcovdcs&dl=0"
+  },
+  {
+    "id": "beat-015",
+    "title": "Can't Pass That",
+    "bpm": 160,
+    "genre": "Philly Drill",
+    "mood": "Dark, Atmospheric",
+    "url": "https://www.dropbox.com/scl/fi/qoeol3jramrvkjbkzg1bc/philly-drill-dark-atmo-Cant-pass-that...-160bpm-C-min-V4.wav?rlkey=l2ooo5ir09u13nvp55ba5ton0&dl=0"
+  },
+  {
+    "id": "beat-016",
+    "title": "Ocean",
+    "bpm": 150,
+    "genre": "Philly Drill",
+    "mood": "Dark, Aggressive",
+    "url": "https://www.dropbox.com/scl/fi/1tvfh0gccp9rq38wih3dh/philly-drill-dark-aggresive-Ocean-150bpm-C-min-x-s1monbeatz.wav?rlkey=xzdzyo8jb5sl2sg8ukrlt7qcg&dl=0"
+  },
+  {
+    "id": "beat-017",
+    "title": "Flavours and Scents",
+    "bpm": 140,
+    "genre": "Jersey Drill",
+    "mood": "Chill, Nostalgic",
+    "url": "https://www.dropbox.com/scl/fi/w0uw9pihfc9uz8eq777u7/jersey-drill-chill-nostalgic-Flavours-and-Scents-140bpm-A-min-Jersey-Drill-x-s1monbeatz-V2.wav?rlkey=pi1qa5mchzgzt1llfjyt0y96b&dl=0"
+  },
+  {
+    "id": "beat-018",
+    "title": "Off the Radar",
+    "bpm": 150,
+    "genre": "Drill",
+    "mood": "Experimental, Anxious",
+    "url": "https://www.dropbox.com/scl/fi/9osfqgswx0fxrugzey78b/drill-experimental-anxious-Off-the-radar-150bpm-Bmin.wav?rlkey=cmosp4m0eeuco9vxx604svzxm&dl=0"
+  },
+  {
+    "id": "beat-019",
+    "title": "Misfortune",
+    "bpm": 144,
+    "genre": "Drill",
+    "mood": "Disrespectful, Weird",
+    "url": "https://www.dropbox.com/scl/fi/tbf56qdxgpafx5atrm76j/drill-disrespectful-weird-Misfortune-144bpm-Dmajor.wav?rlkey=qa8a1w2asff3sgxa9npjq2wxg&dl=0"
+  },
+  {
+    "id": "beat-020",
+    "title": "Leviathan",
+    "bpm": 150,
+    "genre": "Detroit",
+    "mood": "Dark, Hard",
+    "url": "https://www.dropbox.com/scl/fi/1qammrr804u3x4yl6wk8x/detroit-dark-hard-Leviathan-150bpm-Cmin.wav?rlkey=lzy52ej17wepnbkuyz8hmnweq&dl=0"
+  },
+  {
+    "id": "beat-021",
+    "title": "Turban",
+    "bpm": 144,
+    "genre": "Afro",
+    "mood": "Energetic, Hard",
+    "url": "https://www.dropbox.com/scl/fi/itladse8n9c6crgjaf1p2/afro-energetic-hard-Turban-144bpm-D-minor-x-s1monbeatz.wav?rlkey=ngcle3d2nghn9ye80tacyo210&dl=0"
   }
 ]

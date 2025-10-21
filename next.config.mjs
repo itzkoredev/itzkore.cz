@@ -4,6 +4,18 @@ const nextConfig = {
   reactStrictMode: true,
   output: isStatic ? 'export' : 'standalone',
   images: isStatic ? { unoptimized: true } : undefined,
+
+  // Experimentální funkce pro lepší performance
+  experimental: {
+    optimizePackageImports: ['framer-motion', 'lucide-react'],
+  },
+
+  // Compiler optimalizace
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
   async headers() {
     const isDev = process.env.NODE_ENV !== 'production';
     const scriptSrc = isDev

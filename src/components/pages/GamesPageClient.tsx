@@ -7,16 +7,21 @@ export default function GamesPageClient() {
   return (
     <section className="container py-10 space-y-8">
       <header>
-        <h1 className="text-3xl font-bold drop-shadow-neonGreen">{t.games.title}</h1>
-        <p className="mt-3 text-gray-300 max-w-prose">{t.games.blurb}</p>
+        <h1 className="text-3xl font-bold text-text-primary">{t.games.title}</h1>
+        <p className="mt-3 text-text-secondary max-w-prose">{t.games.blurb}</p>
+        {t.games.experience && (
+          <p className="mt-2 text-sm text-text-tertiary italic">
+            {t.games.experience}
+          </p>
+        )}
       </header>
       <div className="grid gap-6 sm:grid-cols-2">
         <a
-          className="block rounded-lg border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition"
+          className="block rounded-lg border border-border-subtle bg-bg-elevated p-5 hover:bg-bg-secondary transition"
           href="https://www.itzkore.cz/cybersurvivor"
           onClick={() => { window.dispatchEvent(new CustomEvent("route-glitch-start")); window.dispatchEvent(new CustomEvent("route-progress-start")); }}
         >
-      <div className="relative h-32 rounded-md overflow-hidden border border-white/10 bg-black/60">
+      <div className="relative h-32 rounded-md overflow-hidden border border-border-subtle bg-bg-secondary">
             <Image
         src="/covers/games/cybersurvivor.png"
               alt="CyberSurvivor"
@@ -28,8 +33,8 @@ export default function GamesPageClient() {
               priority={false}
             />
           </div>
-          <h3 className="mt-3 text-lg font-semibold text-neonCyan drop-shadow-neonCyan">{t.games.cardTitle}</h3>
-          <p className="text-sm text-gray-300">{t.games.cardBlurb}</p>
+          <h3 className="mt-3 text-lg font-semibold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">{t.games.cardTitle}</h3>
+          <p className="text-sm text-text-secondary">{t.games.cardBlurb}</p>
         </a>
       </div>
     </section>

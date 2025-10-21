@@ -2,7 +2,6 @@
 import { usePathname } from "next/navigation";
 import Header from "./Header";
 import Footer from "./Footer";
-import Scene2077 from "./Scene2077";
 import RouteGlitch from "./RouteGlitch";
 import PreloadRoutes from "./PreloadRoutes";
 import RouteReady from "./RouteReady";
@@ -20,14 +19,13 @@ export default function Chrome({ children }: { children: React.ReactNode }) {
     </main>
   );
   return (
-      <div className="flex-1 flex flex-col">
-  <Scene2077 />
+      <div className="flex-1 flex flex-col relative z-10">
   <RouteGlitch theme="black" />
       <PreloadRoutes />
   <RouteReady />
       <ElectionBanner />
       <Header />
-        <main id="main" className="flex-1">{children}</main>
+        <main id="main" className="flex-1 relative">{children}</main>
       <Footer />
       </div>
   );

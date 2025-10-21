@@ -12,16 +12,34 @@ export default function PreloadRoutes() {
   const router = useRouter();
 
   useEffect(() => {
-    const run = () => {
+    let cancelled = false;
+    
+    const run = async () => {
+      if (cancelled) return;
+      
       for (const href of HEAVY_ROUTES) {
-        try { router.prefetch(href); } catch {}
+        if (cancelled) break;
+        try {
+          await router.prefetch(href);
+        } catch (error) {
+          console.warn(`[PreloadRoutes] Failed to prefetch ${href}:`, error);
+        }
       }
     };
+    
     // Prefer idle prefetch, fallback to small delay
     if (typeof (window as any).requestIdleCallback === "function") {
-      (window as any).requestIdleCallback(run, { timeout: 1800 });
+      const idleId = (window as any).requestIdleCallback(run, { timeout: 1800 });
+      return () => {
+        cancelled = true;
+        (window as any).cancelIdleCallback(idleId);
+      };
     } else {
-      setTimeout(run, 500);
+      const timeoutId = setTimeout(run, 500);
+      return () => {
+        cancelled = true;
+        clearTimeout(timeoutId);
+      };
     }
   }, [router]);
 
