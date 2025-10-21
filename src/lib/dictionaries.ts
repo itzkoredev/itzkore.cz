@@ -355,7 +355,7 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
       blurb: "Jsem vášnivý vývojář, tvůrce her a hudební producent. Spojuji technologie s kreativitou a vytvářím unikátní digitální zážitky. Od webových aplikací přes indie hry až po hudební produkci - miluji oživovat nápady napříč různými médii.",
       skills: {
         web: "Web Development",
-        game: "Game Development", 
+        game: "Game Development",
         music: "Music Production"
       },
       achievements: {
