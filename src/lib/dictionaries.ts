@@ -402,7 +402,7 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
             "808/kick balance, sidechain",
             "Streaming loudness",
           ],
-          price: "Cena od — podle náročnosti (dohodou).",
+          price: "Cena od 90€",
         },
         stem: {
           title: "Stem Master",
@@ -412,7 +412,7 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
             "Clip/Limit řetězec pro moderní punch",
             "Kontrola kvality na různých systémech",
           ],
-          price: "Cena od — podle počtu stemů.",
+          price: "Cena od 40€",
         },
         full: {
           title: "Full Project",
@@ -422,7 +422,7 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
             "Kreativní FX pro ad-libs / atmosféru",
             "Export radio/Instagram/clean verzí",
           ],
-          price: "Cena od — podle rozsahu a počtu stop.",
+          price: "Cena od 120€",
         },
       },
       how: {
@@ -717,7 +717,7 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
             "808/kick balance, sidechain",
             "Streaming loudness optimization",
           ],
-          price: "Price from — depending on complexity (by agreement).",
+          price: "Price from €90",
         },
         stem: {
           title: "Stem Master",
@@ -727,7 +727,7 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
             "Clip/Limit chain for modern punch",
             "Quality control on different systems",
           ],
-          price: "Price from — depending on stem count.",
+          price: "Price from €40",
         },
         full: {
           title: "Full Project",
@@ -737,7 +737,7 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
             "Creative FX for ad-libs / atmosphere",
             "Export radio/Instagram/clean versions",
           ],
-          price: "Price from — depending on scope and track count.",
+          price: "Price from €120",
         },
       },
       how: {
