@@ -1,10 +1,22 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ExternalLink, Github, Vote, Sparkles } from 'lucide-react';
+import { ExternalLink, Github, Vote, Sparkles, FileText } from 'lucide-react';
 import Link from 'next/link';
 
 const projects = [
+  {
+    title: 'PDFko - PDF Tools',
+    description: 'Nástroj pro práci s PDF soubory. Smart optimizace velkých PDF výkresů pro rychlé načítání, komprese, merge a split. Vše zdarma a bez nutnosti registrace.',
+    tech: ['PDF Tools', 'Optimizer', 'Smart Compress'],
+    gradient: 'from-red-500 to-orange-500',
+    icon: FileText,
+    status: 'live',
+    links: {
+      live: 'https://itzkore.cz/pdfko',
+      github: null
+    }
+  },
   {
     title: 'Volby 2025 - Volební kalkulačka',
     description: 'Interaktivní volební kalkulačka pro parlamentní volby 2025. Vyplň své politické postoje a zjisti, která strana ti sedí nejlépe.',

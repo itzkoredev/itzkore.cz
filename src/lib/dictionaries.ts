@@ -291,6 +291,10 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
       subtitle: "Webové aplikace a nástroje, které jsem vytvořil",
       statusLive: "🟢 Live",
       statusDev: "🔨 Ve vývoji",
+      pdfko: {
+        title: "PDFko - PDF Tools",
+        description: "Nástroj pro práci s PDF soubory. Smart optimizace velkých PDF výkresů pro rychlé načítání, komprese, merge a split. Vše zdarma a bez nutnosti registrace.",
+      },
       volby2025: {
         title: "Volby 2025 - Kalkulačka",
         description: "Interaktivní volební kalkulačka pro parlamentní volby 2025. Vyplň své politické postoje a zjisti, která strana ti sedí nejlépe.",
@@ -572,6 +576,10 @@ export const dictionaries: Record<Locale, Record<string, any>> = {
       subtitle: "Web applications and tools I've created",
       statusLive: "🟢 Live",
       statusDev: "🔨 In Development",
+      pdfko: {
+        title: "PDFko - PDF Tools",
+        description: "Smart optimization for large PDF drawings. Compress, merge, split - all free without registration.",
+      },
       volby2025: {
         title: "Elections 2025 - Calculator",
         description: "Interactive election calculator for 2025 parliamentary elections. Fill in your political views and find which party suits you best.",

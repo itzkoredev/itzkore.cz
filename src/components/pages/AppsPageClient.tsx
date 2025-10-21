@@ -1,12 +1,22 @@
 "use client";
 import { motion } from "framer-motion";
-import { ExternalLink, Sparkles, Vote } from "lucide-react";
+import { ExternalLink, Sparkles, Vote, FileText } from "lucide-react";
 import { useI18n } from "../../lib/i18n";
 
 export default function AppsPageClient() {
   const { t } = useI18n();
 
   const apps = [
+    {
+      id: 'pdfko',
+      title: t.apps.pdfko.title,
+      description: t.apps.pdfko.description,
+      href: 'https://itzkore.cz/pdfko',
+      icon: FileText,
+      gradient: 'from-red-500 to-orange-500',
+      status: 'live' as const,
+      tags: ['PDF Tools', 'Optimizer', 'Smart Compress']
+    },
     {
       id: 'volby2025',
       title: t.apps.volby2025.title,
