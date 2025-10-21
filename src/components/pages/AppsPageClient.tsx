@@ -136,7 +136,7 @@ function AppCard({ app }: { app: { id: string; title: string; description: strin
         {app.tags.filter(tag => tag.trim()).map((tag) => (
           <span
             key={tag}
-            className="px-2 py-1 rounded-md bg-bg-secondary text-text-primary text-xs font-medium"
+            className="px-2 py-1 rounded-md bg-bg-secondary text-gray-700 dark:text-gray-300 text-xs font-medium"
           >
             {tag}
           </span>

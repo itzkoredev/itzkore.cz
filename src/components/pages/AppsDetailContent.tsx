@@ -97,7 +97,7 @@ export default function AppsDetailContent() {
                     {project.tech.filter(tech => tech.trim()).map((tech, i) => (
                       <span
                         key={i}
-                        className="px-2 py-1 rounded-md bg-bg-secondary text-text-primary text-xs font-medium"
+                        className="px-2 py-1 rounded-md bg-bg-secondary text-gray-700 dark:text-gray-300 text-xs font-medium"
                       >
                         {tech}
                       </span>
