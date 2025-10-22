@@ -113,7 +113,7 @@ export default function RootLayout({
         {/* Preconnect to critical origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
+
         {/* No-flash scripts - MUST run before React hydration */}
         <script
           dangerouslySetInnerHTML={{

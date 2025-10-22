@@ -16,7 +16,7 @@ export default function HomePageClient() {
 
   useEffect(() => {
     setMounted(true);
-    
+
     // Simulate loading stages
     const stages = [
       { progress: 20, delay: 100 },  // Fonts loaded

@@ -32,19 +32,19 @@ export default function SplashIntro({ onComplete, progress: externalProgress }: 
     // Fallback auto-animation
     const duration = 1500;
     const startTime = Date.now();
-    
+
     const animate = () => {
       const elapsed = Date.now() - startTime;
       const newProgress = Math.min((elapsed / duration) * 100, 100);
       setProgress(newProgress);
-      
+
       if (newProgress < 100) {
         requestAnimationFrame(animate);
       } else {
         setTimeout(() => setShowContent(true), 100);
       }
     };
-    
+
     requestAnimationFrame(animate);
 
     // Auto-skip after 3 seconds
@@ -91,7 +91,7 @@ export default function SplashIntro({ onComplete, progress: externalProgress }: 
       </div>
 
       {/* Subtle radial gradient */}
-      <div 
+      <div
         className="absolute inset-0"
         style={{
           background: 'radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 60%)',
