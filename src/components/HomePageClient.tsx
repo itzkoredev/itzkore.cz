@@ -1,35 +1,52 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import SplashIntro from './SplashIntro';
-import CategoryHub from './CategoryHub';
+
+// Lazy load heavy components
+const CategoryHub = dynamic(() => import('./CategoryHub'), {
+  loading: () => null,
+});
 
 export default function HomePageClient() {
   const [showIntro, setShowIntro] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
 
   useEffect(() => {
     setMounted(true);
-    // Always show intro on fresh page load
-    // sessionStorage is NOT used - intro shows every time
+    
+    // Simulate loading stages
+    const stages = [
+      { progress: 20, delay: 100 },  // Fonts loaded
+      { progress: 40, delay: 200 },  // CSS loaded
+      { progress: 60, delay: 300 },  // Components loading
+      { progress: 80, delay: 400 },  // Almost ready
+      { progress: 100, delay: 500 }, // Ready
+    ];
+
+    stages.forEach(({ progress, delay }) => {
+      setTimeout(() => setLoadProgress(progress), delay);
+    });
+
+    // Check if user has seen intro this session
+    const hasSeenIntro = sessionStorage.getItem('itzkore-intro-seen');
+    if (hasSeenIntro) {
+      // Skip intro but still show brief loading
+      setTimeout(() => setShowIntro(false), 600);
+    }
   }, []);
 
   const handleIntroComplete = () => {
     setShowIntro(false);
+    sessionStorage.setItem('itzkore-intro-seen', 'true');
   };
 
-  // Prevent flash of content
-  if (!mounted) {
-    return <div className="min-h-screen bg-white dark:bg-gray-950" />;
+  // Show intro/loading while mounting
+  if (!mounted || showIntro) {
+    return <SplashIntro onComplete={handleIntroComplete} progress={loadProgress} />;
   }
 
-  return (
-    <>
-      {showIntro ? (
-        <SplashIntro onComplete={handleIntroComplete} />
-      ) : (
-        <CategoryHub />
-      )}
-    </>
-  );
+  return <CategoryHub />;
 }

@@ -13,12 +13,16 @@ const exo2 = Exo_2({
   weight: ["400", "600", "700", "800"],
   variable: "--font-orbitron",
   display: "swap",
+  preload: true,
+  fallback: ["system-ui", "arial"],
 });
 const bodyFont = Space_Grotesk({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "700"],
   variable: "--font-body",
   display: "swap",
+  preload: true,
+  fallback: ["system-ui", "arial"],
 });
 
 export const metadata: Metadata = {
@@ -106,6 +110,10 @@ export default function RootLayout({
   return (
     <html lang="cs" data-theme="light" className="" suppressHydrationWarning>
       <head>
+        {/* Preconnect to critical origins */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
         {/* No-flash scripts - MUST run before React hydration */}
         <script
           dangerouslySetInnerHTML={{

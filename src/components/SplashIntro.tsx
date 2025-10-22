@@ -6,9 +6,10 @@ import { useI18n } from '../lib/i18n';
 
 interface SplashIntroProps {
   onComplete: () => void;
+  progress?: number;
 }
 
-export default function SplashIntro({ onComplete }: SplashIntroProps) {
+export default function SplashIntro({ onComplete, progress: externalProgress }: SplashIntroProps) {
   const [progress, setProgress] = useState(0);
   const [showContent, setShowContent] = useState(false);
   const { locale } = useI18n();
@@ -18,8 +19,18 @@ export default function SplashIntro({ onComplete }: SplashIntroProps) {
   }, [onComplete]);
 
   useEffect(() => {
-    // Fast progress animation - 120Hz optimized
-    const duration = 1500; // 1.5s total
+    // Use external progress if provided, otherwise auto-animate
+    if (externalProgress !== undefined) {
+      setProgress(externalProgress);
+      if (externalProgress >= 100) {
+        setTimeout(() => setShowContent(true), 100);
+        setTimeout(() => handleSkip(), 800); // Auto-complete when loaded
+      }
+      return;
+    }
+
+    // Fallback auto-animation
+    const duration = 1500;
     const startTime = Date.now();
     
     const animate = () => {
@@ -41,7 +52,13 @@ export default function SplashIntro({ onComplete }: SplashIntroProps) {
       handleSkip();
     }, 3000);
 
-    // Enter/Escape/Space key handlers
+    return () => {
+      clearTimeout(autoSkip);
+    };
+  }, [handleSkip, externalProgress]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') {
         handleSkip();
@@ -49,11 +66,7 @@ export default function SplashIntro({ onComplete }: SplashIntroProps) {
     };
 
     window.addEventListener('keydown', handleKeyPress);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-      clearTimeout(autoSkip);
-    };
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, [handleSkip]);
 
   return (
